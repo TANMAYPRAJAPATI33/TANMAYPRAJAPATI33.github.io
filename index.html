@@ -2,56 +2,167 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tanmay Prajapati</title>
+  <title>Tanmay Prajapati - Animated Profile</title>
   <!-- Load Anime.js from a CDN -->
   <script src="https://unpkg.com/animejs/lib/anime.min.js"></script>
   <style>
-    body {
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
       margin: 0;
       padding: 0;
-      background: #222;
-      color: #fff;
       font-family: sans-serif;
+      background: #111;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    /* Navigation Bar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1em;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #22ccaa;
+    }
+    /* Section Styles */
+    header, section {
+      padding: 100px 20px;
+      text-align: center;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      align-items: center;
     }
-    h1 {
-      font-size: 3em;
-      opacity: 0; /* We'll animate this from 0 to 1 */
+    header {
+      background: #222;
     }
-    p {
+    section {
+      background: #111;
+    }
+    .section-title {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      opacity: 0; /* start hidden for animation */
+    }
+    .section-content {
       font-size: 1.2em;
-      opacity: 0; /* We'll animate this too */
-      margin-top: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0; /* start hidden for animation */
     }
   </style>
 </head>
 <body>
-  <h1 id="title">Tanmay Prajapati</h1>
-  <p id="subtitle">Second-year Computer Science student specializing in Cybersecurity</p>
+  <!-- Navigation -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  
+  <!-- Header Section -->
+  <header id="home">
+    <h1 id="header-title">Tanmay Prajapati</h1>
+    <p id="header-subtitle">Second-year Computer Science student specializing in Cybersecurity</p>
+  </header>
+  
+  <!-- About Section -->
+  <section id="about">
+    <h2 class="section-title">About Me</h2>
+    <p class="section-content">
+      I am a passionate student exploring the fields of Cybersecurity, Blockchain, Web3, and full-stack development. I love learning and creating innovative solutions.
+    </p>
+  </section>
+  
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2 class="section-title">Skills</h2>
+    <p class="section-content">
+      My skills include Cybersecurity, MERN Stack, Blockchain & Web3, and Linux. I constantly update my knowledge to stay ahead in the tech world.
+    </p>
+  </section>
+  
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2 class="section-title">Projects</h2>
+    <p class="section-content">
+      Check out my GitHub repositories for projects ranging from web applications to security research.
+    </p>
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2 class="section-title">Contact</h2>
+    <p class="section-content">
+      Connect with me on <a href="https://www.linkedin.com/in/tanmay-prajapati-16a4a628b/" target="_blank" style="color:#22ccaa;">LinkedIn</a> or email me at <a href="mailto:tanmayprajapati190@gmail.com" target="_blank" style="color:#22ccaa;">tanmayprajapati190@gmail.com</a>.
+    </p>
+  </section>
 
   <script>
-    // Animate the title (fade in, slide down)
-    anime({
-      targets: '#title',
-      opacity: [0, 1],
-      translateY: [-20, 0],
-      easing: 'easeOutExpo',
-      duration: 1500
-    });
-
-    // Animate the subtitle (fade in, slide up) after a delay
-    anime({
-      targets: '#subtitle',
-      opacity: [0, 1],
-      translateY: [20, 0],
-      easing: 'easeOutExpo',
-      duration: 1500,
-      delay: 500
+    // Animate header on page load
+    anime.timeline({ easing: 'easeOutExpo', duration: 1000 })
+      .add({
+        targets: '#header-title',
+        opacity: [0, 1],
+        translateY: [-50, 0]
+      })
+      .add({
+        targets: '#header-subtitle',
+        opacity: [0, 1],
+        translateY: [50, 0],
+        offset: '-=500'
+      });
+    
+    // Animate sections when they come into view
+    const sections = document.querySelectorAll('section');
+    const observerOptions = {
+      threshold: 0.3
+    };
+    
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          anime({
+            targets: entry.target.querySelector('.section-title'),
+            opacity: [0, 1],
+            translateY: [-30, 0],
+            duration: 800,
+            easing: 'easeOutExpo'
+          });
+          anime({
+            targets: entry.target.querySelector('.section-content'),
+            opacity: [0, 1],
+            translateY: [30, 0],
+            duration: 800,
+            easing: 'easeOutExpo',
+            delay: 200
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+      observer.observe(section);
     });
   </script>
 </body>
