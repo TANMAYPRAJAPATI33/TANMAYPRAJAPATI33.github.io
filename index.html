@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tanmay Prajapati's Profile</title>
-  <!-- Include Anime.js -->
+  <meta charset="UTF-8">
+  <title>Tanmay Prajapati</title>
+  <!-- Load Anime.js from a CDN -->
   <script src="https://unpkg.com/animejs/lib/anime.min.js"></script>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       background: #222;
       color: #fff;
       font-family: sans-serif;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-      margin: 0;
+      overflow: hidden;
     }
     h1 {
       font-size: 3em;
-      margin: 0;
-      opacity: 0;
+      opacity: 0; /* We'll animate this from 0 to 1 */
     }
     p {
-      font-size: 1.5em;
-      opacity: 0;
+      font-size: 1.2em;
+      opacity: 0; /* We'll animate this too */
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -34,25 +35,24 @@
   <p id="subtitle">Second-year Computer Science student specializing in Cybersecurity</p>
 
   <script>
-    // Animate the title
+    // Animate the title (fade in, slide down)
     anime({
       targets: '#title',
-      translateY: [-50, 0],
       opacity: [0, 1],
+      translateY: [-20, 0],
       easing: 'easeOutExpo',
-      duration: 2000
+      duration: 1500
     });
-    
-    // Animate the subtitle with a delay
+
+    // Animate the subtitle (fade in, slide up) after a delay
     anime({
       targets: '#subtitle',
-      translateY: [50, 0],
       opacity: [0, 1],
+      translateY: [20, 0],
       easing: 'easeOutExpo',
-      duration: 2000,
-      delay: 1000
+      duration: 1500,
+      delay: 500
     });
   </script>
 </body>
 </html>
-
