@@ -2,52 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tanmay Prajapati - Vanta.NET Background</title>
+  <title>Tanmay Prajapati - Animated Portfolio</title>
 
-  <!-- We'll still use Anime.js for text animations (optional) -->
-  <script src="https://unpkg.com/animejs/lib/anime.min.js"></script>
-
-  <!-- Vanta + an older Three.js version it depends on -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
 
   <style>
-    /* Basic Reset & Global Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* Reset & Global */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100%;
       height: 100%;
       font-family: sans-serif;
+      background: #000;
       color: #fff;
       overflow-x: hidden;
-      scroll-behavior: smooth;
     }
 
-    /* Vanta will animate the background of this container */
-    #vanta-bg {
-      position: fixed;
+    /* Three.js Canvas */
+    #bg-canvas {
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      z-index: -1; /* behind everything */
+      height: 100vh;
+      z-index: -1; /* Behind everything */
     }
 
-    /* Navigation Bar */
+    /* Navigation */
     nav {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
       padding: 15px;
+      text-align: center;
       z-index: 10;
     }
     nav a {
@@ -55,172 +45,79 @@
       text-decoration: none;
       margin: 0 15px;
       font-size: 1em;
-      transition: color 0.3s ease;
-    }
-    nav a:hover {
-      color: #22ccaa;
     }
 
-    /* Sections */
-    section {
-      min-height: 100vh;
+    /* Hero Section */
+    .hero {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
       text-align: center;
-      padding: 100px 20px;
+      position: relative;
+      z-index: 2; /* Above the sphere */
     }
-    header {
-      margin-top: 60px; /* keep nav from overlapping */
-    }
-    .title {
-      font-size: 3em;
-      opacity: 0; /* for animation with Anime.js */
-      margin-bottom: 20px;
-    }
-    .subtitle {
-      font-size: 1.2em;
-      max-width: 800px;
-      margin: 0 auto;
-      opacity: 0;
-    }
-    h2 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      opacity: 0;
-    }
-    p {
-      font-size: 1.1em;
-      max-width: 800px;
-      opacity: 0;
-    }
+    h1 { font-size: 3em; }
+    p { font-size: 1.2em; }
+
   </style>
 </head>
 <body>
-  <!-- Vanta.js container -->
-  <div id="vanta-bg"></div>
+
+  <!-- Three.js Canvas -->
+  <canvas id="bg-canvas"></canvas>
 
   <!-- Navigation -->
   <nav>
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#skills">Skills</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Skills</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
   </nav>
 
-  <!-- Header Section -->
-  <section id="home">
-    <header>
-      <h1 class="title" id="header-title">Tanmay Prajapati</h1>
-      <p class="subtitle" id="header-subtitle">
-        Second-year Computer Science student specializing in Cybersecurity
-      </p>
-    </header>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h1>Tanmay Prajapati</h1>
+      <p>Second-year Computer Science student specializing in Cybersecurity</p>
+    </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>
-      I am a passionate student exploring Cybersecurity, Blockchain, Web3, and the MERN stack.
-      I enjoy learning and creating innovative solutions to real-world problems.
-    </p>
-  </section>
-
-  <!-- Skills Section -->
-  <section id="skills">
-    <h2>Skills</h2>
-    <p>
-      - Cybersecurity<br/>
-      - MERN Stack (MongoDB, Express, React, Node.js)<br/>
-      - Blockchain & Web3<br/>
-      - Linux & Docker<br/>
-      - C++, Java, Python
-    </p>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects">
-    <h2>Projects</h2>
-    <p>
-      Check out my GitHub repositories to see my latest work on full-stack applications,
-      security research, and experimental blockchain projects.
-    </p>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>
-      Connect with me on 
-      <a href="https://www.linkedin.com/in/tanmay-prajapati-16a4a628b/" target="_blank" style="color:#22ccaa;">LinkedIn</a> 
-      or email me at 
-      <a href="mailto:tanmayprajapati190@gmail.com" style="color:#22ccaa;">tanmayprajapati190@gmail.com</a>.
-    </p>
-  </section>
-
+  <!-- Three.js Script -->
   <script>
-    /****************************************************
-     * VANTA.NET Initialization
-     ****************************************************/
-    let vantaEffect;
-    window.addEventListener('DOMContentLoaded', () => {
-      vantaEffect = VANTA.NET({
-        el: "#vanta-bg",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        // OPTIONAL: Adjust the following for your style
-        color: 0xff4400,     // main color
-        backgroundColor: 0x000000, // background behind the net
-        points: 12.0,
-        maxDistance: 20.0,
-        spacing: 18.0
-      });
-    });
+    let scene, camera, renderer, sphere;
+    function init() {
+      // Create Scene
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 50;
 
-    /****************************************************
-     * ANIME.JS - Animate header text on page load
-     ****************************************************/
-    anime.timeline({ easing: 'easeOutExpo', duration: 1200 })
-      .add({
-        targets: '#header-title',
-        opacity: [0, 1],
-        translateY: [-30, 0]
-      })
-      .add({
-        targets: '#header-subtitle',
-        opacity: [0, 1],
-        translateY: [30, 0],
-        offset: '-=600'
-      });
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("bg-canvas"), alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
 
-    /****************************************************
-     * SCROLL ANIMATIONS - Fade in sections on scroll
-     ****************************************************/
-    const sections = document.querySelectorAll('section h2, section p');
-    const observerOptions = { threshold: 0.1 };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          anime({
-            targets: entry.target,
-            opacity: [0, 1],
-            translateY: [30, 0],
-            duration: 1000,
-            easing: 'easeOutExpo'
-          });
-          observer.unobserve(entry.target);
-        }
+      // Sphere Geometry
+      const geometry = new THREE.SphereGeometry(30, 32, 32);
+      const material = new THREE.MeshBasicMaterial({ 
+        wireframe: true, 
+        color: 0x22ccff 
       });
-    }, observerOptions);
+      sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
 
-    sections.forEach(el => {
-      observer.observe(el);
-    });
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      sphere.rotation.y += 0.003;
+      renderer.render(scene, camera);
+    }
+
+    init();
   </script>
+
 </body>
 </html>
