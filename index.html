@@ -21,7 +21,7 @@
       width: 100%;
       height: 100%;
       font-family: sans-serif;
-      background: #000; /* pure black for contrast */
+      background: #000; /* pure black */
       color: #fff;
       overflow-x: hidden;
       scroll-behavior: smooth;
@@ -34,7 +34,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1; /* behind everything */
+      z-index: 0; /* Changed from -1 so the sphere is above the plain background */
     }
 
     /* Navigation Bar */
@@ -48,7 +48,7 @@
       justify-content: center;
       align-items: center;
       padding: 15px;
-      z-index: 10;
+      z-index: 10; /* Ensure nav is above the canvas */
     }
     nav a {
       color: #fff;
@@ -70,6 +70,8 @@
       align-items: center;
       text-align: center;
       padding: 100px 20px;
+      position: relative;
+      z-index: 5; /* Content will appear above the sphere */
     }
     header {
       margin-top: 60px; /* so it's not hidden behind nav */
@@ -208,70 +210,12 @@
       });
       sphere = new THREE.Mesh(geometry, material);
       
-      // Shift sphere upward so it's centered behind the content
-      sphere.position.y = -10; 
+      // Move sphere upward so it's centered behind content
+      sphere.position.y = -10;
 
       scene.add(sphere);
       animate3D();
     }
 
     function animate3D() {
-      requestAnimationFrame(animate3D);
-      // Rotate sphere
-      sphere.rotation.y += 0.005;
-      sphere.rotation.x += 0.003;
-      renderer.render(scene, camera);
-    }
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    init3D();
-
-    /****************************************************
-     * ANIME.JS - Animate header text on page load
-     ****************************************************/
-    anime.timeline({ easing: 'easeOutExpo', duration: 1200 })
-      .add({
-        targets: '#header-title',
-        opacity: [0, 1],
-        translateY: [-30, 0]
-      })
-      .add({
-        targets: '#header-subtitle',
-        opacity: [0, 1],
-        translateY: [30, 0],
-        offset: '-=600'
-      });
-
-    /****************************************************
-     * SCROLL ANIMATIONS - Fade in sections on scroll
-     ****************************************************/
-    const sections = document.querySelectorAll('section h2, section p, section .btn');
-    const observerOptions = { threshold: 0.1 };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          anime({
-            targets: entry.target,
-            opacity: [0, 1],
-            translateY: [30, 0],
-            duration: 1000,
-            easing: 'easeOutExpo'
-          });
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    sections.forEach(el => {
-      observer.observe(el);
-    });
-  </script>
-</body>
-</html>
+   
