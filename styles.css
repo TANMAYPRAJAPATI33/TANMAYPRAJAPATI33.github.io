@@ -1,0 +1,136 @@
+/* Updated CSS (styles.css) */
+
+/* 1. Smooth Scrolling */
+html {
+  scroll-behavior: smooth;  /* Enables smooth scroll for anchor links :contentReference[oaicite:9]{index=9} */
+}
+
+/* 2. Section Fade-In Transition with 3D effect */
+.fade-section {
+  opacity: 0;
+  transform: translateY(50px) rotateX(5deg);  /* start slightly below and tilted :contentReference[oaicite:10]{index=10} */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  /* You can add perspective on a parent element (e.g., body or .scene) if using translateZ for depth */
+}
+.fade-section.in-view {
+  opacity: 1;
+  transform: none;  /* move to original position when in view :contentReference[oaicite:11]{index=11} */
+}
+
+/* 3. Text Animations */
+/* Typing effect: (no specific CSS needed for text being typed, but optional cursor style) */
+#typewriter-text {
+  /* The content will be injected by JS. Optionally, add styling here (font-size, color, etc.) */
+}
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background: currentColor;
+  animation: blink 0.8s steps(1) infinite;
+  vertical-align: bottom;
+  margin-left: 2px;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.1%, 100% { opacity: 0; }
+}
+
+/* Word reveal animation */
+.word-reveal .word {
+  opacity: 0;
+  transform: translateY(1em);
+  display: inline-block;
+  transition: 0.6s ease;
+}
+.word-reveal .word.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Floating text effect */
+.floating-text {
+  animation: floating 3s infinite ease-in-out;
+}
+@keyframes floating {
+  0%   { transform: translateY(0); }
+  65%  { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+/* 4. 3D Cube and Scene */
+.scene {
+  perspective: 800px;  /* Give a perspective to the scene for 3D depth */
+  position: relative;
+  width: 100%; height: 400px;
+  /* ensure .scene has some height or is fullscreen depending on design */
+  overflow: visible;
+}
+.cube {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%); /* center the cube in .scene */
+  transform-style: preserve-3d;
+  animation: rotateCube 20s infinite linear;
+}
+.face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  /* Each face could have its own background for identification */
+  background: rgba(255, 255, 255, 0.1); /* semi-transparent face */
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.face.front  { transform: translateZ(100px); }   /* front face */
+.face.back   { transform: rotateY(180deg) translateZ(100px); }
+.face.right  { transform: rotateY(90deg) translateZ(100px); }
+.face.left   { transform: rotateY(-90deg) translateZ(100px); }
+.face.top    { transform: rotateX(90deg) translateZ(100px); }
+.face.bottom { transform: rotateX(-90deg) translateZ(100px); }
+/* The cube faces are positioned 100px (half the cube size) out from center :contentReference[oaicite:12]{index=12} */
+
+@keyframes rotateCube {
+  0%   { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
+  100% { transform: translate(-50%, -50%) rotateX(360deg) rotateY(360deg); }
+}
+/* (We include translate(-50%, -50%) in keyframes to keep the cube centered during rotation) */
+
+/* 5. Floating objects (parallax) */
+.floating-objects {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;   /* make sure they don't block clicks */
+  overflow: visible;
+}
+.float-obj {
+  position: absolute;
+  /* Each .float-obj has inline styles for size, color, and position defined in HTML or could be in CSS here */
+  /* Common styles can be defined here as needed (like shape, shadow, etc.) */
+}
+
+/* 6. Starfield background */
+#stars {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: transparent;  /* ensure background is transparent so we see stars on any background color */
+  pointer-events: none;
+  z-index: -1;   /* place behind other content */
+}
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  opacity: 0.8;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(255,255,255,0.5);
+  animation: twinkle 5s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%   { opacity: 0.2; transform: scale(1); }
+  50%  { opacity: 1;   transform: scale(2); }
+  100% { opacity: 0.2; transform: scale(1); }
+}
+/* The twinkle animation fades stars in and out, and briefly scales them up :contentReference[oaicite:13]{index=13} */
