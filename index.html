@@ -1,34 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tanmay Prajapati - Animated Profile</title>
-  <!-- Load Anime.js from a CDN -->
+  <meta charset="UTF-8" />
+  <title>Tanmay Prajapati - 3D Animated Profile</title>
+  
+  <!-- Three.js (for 3D) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+  
+  <!-- Anime.js (for text animations) -->
   <script src="https://unpkg.com/animejs/lib/anime.min.js"></script>
+  
   <style>
-    /* Global Styles */
+    /* Reset & Global Styles */
     * {
-      box-sizing: border-box;
-    }
-    body, html {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
       font-family: sans-serif;
       background: #111;
       color: #fff;
+      overflow-x: hidden;
       scroll-behavior: smooth;
     }
+
+    /* Canvas for Three.js (background) */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Behind everything */
+    }
+
     /* Navigation Bar */
     nav {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.7);
       display: flex;
       justify-content: center;
-      z-index: 100;
+      align-items: center;
+      padding: 15px;
+      z-index: 10;
     }
     nav a {
       color: #fff;
@@ -40,37 +60,62 @@
     nav a:hover {
       color: #22ccaa;
     }
-    /* Section Styles */
-    header, section {
-      padding: 100px 20px;
-      text-align: center;
+
+    /* Sections */
+    section {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      text-align: center;
+      padding: 100px 20px;
     }
     header {
-      background: #222;
+      margin-top: 60px; /* to not hide behind nav */
     }
-    section {
-      background: #111;
-    }
-    .section-title {
-      font-size: 2.5em;
+    .title {
+      font-size: 3em;
+      opacity: 0; /* start invisible for animation */
       margin-bottom: 20px;
-      opacity: 0; /* start hidden for animation */
     }
-    .section-content {
+    .subtitle {
       font-size: 1.2em;
       max-width: 800px;
       margin: 0 auto;
-      opacity: 0; /* start hidden for animation */
+      opacity: 0; /* start invisible for animation */
+    }
+    h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+    p {
+      font-size: 1.1em;
+      max-width: 800px;
+      opacity: 0;
+    }
+    a.btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #22ccaa;
+      color: #111;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    a.btn:hover {
+      background: #1fa68c;
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- 3D Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Navigation Bar -->
   <nav>
     <a href="#home">Home</a>
     <a href="#about">About</a>
@@ -78,91 +123,152 @@
     <a href="#projects">Projects</a>
     <a href="#contact">Contact</a>
   </nav>
-  
+
   <!-- Header Section -->
-  <header id="home">
-    <h1 id="header-title">Tanmay Prajapati</h1>
-    <p id="header-subtitle">Second-year Computer Science student specializing in Cybersecurity</p>
-  </header>
-  
+  <section id="home">
+    <header>
+      <h1 class="title" id="header-title">Tanmay Prajapati</h1>
+      <p class="subtitle" id="header-subtitle">
+        Second-year Computer Science student specializing in Cybersecurity
+      </p>
+    </header>
+  </section>
+
   <!-- About Section -->
   <section id="about">
-    <h2 class="section-title">About Me</h2>
-    <p class="section-content">
-      I am a passionate student exploring the fields of Cybersecurity, Blockchain, Web3, and full-stack development. I love learning and creating innovative solutions.
-    </p>
-  </section>
-  
-  <!-- Skills Section -->
-  <section id="skills">
-    <h2 class="section-title">Skills</h2>
-    <p class="section-content">
-      My skills include Cybersecurity, MERN Stack, Blockchain & Web3, and Linux. I constantly update my knowledge to stay ahead in the tech world.
-    </p>
-  </section>
-  
-  <!-- Projects Section -->
-  <section id="projects">
-    <h2 class="section-title">Projects</h2>
-    <p class="section-content">
-      Check out my GitHub repositories for projects ranging from web applications to security research.
-    </p>
-  </section>
-  
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2 class="section-title">Contact</h2>
-    <p class="section-content">
-      Connect with me on <a href="https://www.linkedin.com/in/tanmay-prajapati-16a4a628b/" target="_blank" style="color:#22ccaa;">LinkedIn</a> or email me at <a href="mailto:tanmayprajapati190@gmail.com" target="_blank" style="color:#22ccaa;">tanmayprajapati190@gmail.com</a>.
+    <h2>About Me</h2>
+    <p>
+      I am a passionate student exploring Cybersecurity, Blockchain, Web3, and the MERN stack.
+      I enjoy learning and creating innovative solutions to real-world problems.
     </p>
   </section>
 
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <p>
+      - Cybersecurity<br/>
+      - MERN Stack (MongoDB, Express, React, Node.js)<br/>
+      - Blockchain & Web3<br/>
+      - Linux & Docker<br/>
+      - C++, Java, Python
+    </p>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <p>
+      Check out my GitHub repositories to see my latest work on full-stack applications,
+      security research, and experimental blockchain projects.
+    </p>
+    <a class="btn" href="https://github.com/TANMAYPRAJAPATI33" target="_blank">View My GitHub</a>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>
+      Connect with me on 
+      <a href="https://www.linkedin.com/in/tanmay-prajapati-16a4a628b/" target="_blank" style="color:#22ccaa;">LinkedIn</a> 
+      or email me at 
+      <a href="mailto:tanmayprajapati190@gmail.com" style="color:#22ccaa;">tanmayprajapati190@gmail.com</a>.
+    </p>
+  </section>
+
+  <!-- Scripts -->
   <script>
-    // Animate header on page load
-    anime.timeline({ easing: 'easeOutExpo', duration: 1000 })
+    /****************************************************
+     * THREE.JS - Create a rotating wireframe sphere
+     ****************************************************/
+    let scene, camera, renderer, sphere;
+    const canvas = document.getElementById('bg-canvas');
+
+    function init3D() {
+      // Scene & Camera
+      scene = new THREE.Scene();
+      const fov = 60;
+      const aspect = window.innerWidth / window.innerHeight;
+      const near = 0.1;
+      const far = 1000;
+      camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      camera.position.z = 50;
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+
+      // Sphere Geometry
+      const geometry = new THREE.SphereGeometry(15, 64, 64);
+      const material = new THREE.MeshBasicMaterial({
+        wireframe: true,
+        color: 0xff4400,
+        opacity: 0.5,
+        transparent: true
+      });
+      sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+
+      animate3D();
+    }
+
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+      // Rotate sphere
+      sphere.rotation.y += 0.001;
+      sphere.rotation.x += 0.0005;
+      renderer.render(scene, camera);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    init3D();
+
+    /****************************************************
+     * ANIME.JS - Animate header text on page load
+     ****************************************************/
+    anime.timeline({ easing: 'easeOutExpo', duration: 1200 })
       .add({
         targets: '#header-title',
         opacity: [0, 1],
-        translateY: [-50, 0]
+        translateY: [-30, 0]
       })
       .add({
         targets: '#header-subtitle',
         opacity: [0, 1],
-        translateY: [50, 0],
-        offset: '-=500'
+        translateY: [30, 0],
+        offset: '-=600' // start 600ms earlier
       });
+
+    /****************************************************
+     * SCROLL ANIMATIONS - Fade in sections on scroll
+     ****************************************************/
+    const sections = document.querySelectorAll('section h2, section p, section .btn');
+    const observerOptions = { threshold: 0.1 };
     
-    // Animate sections when they come into view
-    const sections = document.querySelectorAll('section');
-    const observerOptions = {
-      threshold: 0.3
-    };
-    
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if(entry.isIntersecting) {
+        if (entry.isIntersecting) {
           anime({
-            targets: entry.target.querySelector('.section-title'),
-            opacity: [0, 1],
-            translateY: [-30, 0],
-            duration: 800,
-            easing: 'easeOutExpo'
-          });
-          anime({
-            targets: entry.target.querySelector('.section-content'),
+            targets: entry.target,
             opacity: [0, 1],
             translateY: [30, 0],
-            duration: 800,
-            easing: 'easeOutExpo',
-            delay: 200
+            duration: 1000,
+            easing: 'easeOutExpo'
           });
           observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
-    
-    sections.forEach(section => {
-      observer.observe(section);
+
+    sections.forEach(el => {
+      observer.observe(el);
     });
   </script>
 </body>
