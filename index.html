@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tanmay Prajapati's Profile</title>
+  <!-- Include Anime.js -->
+  <script src="https://unpkg.com/animejs/lib/anime.min.js"></script>
+  <style>
+    body {
+      background: #222;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 3em;
+      margin: 0;
+      opacity: 0;
+    }
+    p {
+      font-size: 1.5em;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Tanmay Prajapati</h1>
+  <p id="subtitle">Second-year Computer Science student specializing in Cybersecurity</p>
+
+  <script>
+    // Animate the title
+    anime({
+      targets: '#title',
+      translateY: [-50, 0],
+      opacity: [0, 1],
+      easing: 'easeOutExpo',
+      duration: 2000
+    });
+    
+    // Animate the subtitle with a delay
+    anime({
+      targets: '#subtitle',
+      translateY: [50, 0],
+      opacity: [0, 1],
+      easing: 'easeOutExpo',
+      duration: 2000,
+      delay: 1000
+    });
+  </script>
+</body>
+</html>
