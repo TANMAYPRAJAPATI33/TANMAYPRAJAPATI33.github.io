@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tanmay Prajapati - 3D Animated Profile</title>
+  <meta charset="UTF-8">
+  <title>Tanmay Prajapati - Vanta.NET Background</title>
 
-  <!-- Three.js -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-
-  <!-- Anime.js -->
+  <!-- We'll still use Anime.js for text animations (optional) -->
   <script src="https://unpkg.com/animejs/lib/anime.min.js"></script>
 
+  <!-- Vanta + an older Three.js version it depends on -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
   <style>
-    /* Reset & Global Styles */
+    /* Basic Reset & Global Styles */
     * {
       margin: 0;
       padding: 0;
@@ -21,20 +22,19 @@
       width: 100%;
       height: 100%;
       font-family: sans-serif;
-      background: #000; /* pure black */
       color: #fff;
       overflow-x: hidden;
       scroll-behavior: smooth;
     }
 
-    /* Canvas for Three.js (background) */
-    #bg-canvas {
+    /* Vanta will animate the background of this container */
+    #vanta-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0; /* Changed from -1 so the sphere is above the plain background */
+      z-index: -1; /* behind everything */
     }
 
     /* Navigation Bar */
@@ -43,12 +43,12 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 15px;
-      z-index: 10; /* Ensure nav is above the canvas */
+      z-index: 10;
     }
     nav a {
       color: #fff;
@@ -70,22 +70,20 @@
       align-items: center;
       text-align: center;
       padding: 100px 20px;
-      position: relative;
-      z-index: 5; /* Content will appear above the sphere */
     }
     header {
-      margin-top: 60px; /* so it's not hidden behind nav */
+      margin-top: 60px; /* keep nav from overlapping */
     }
     .title {
       font-size: 3em;
-      opacity: 0; /* for animation */
+      opacity: 0; /* for animation with Anime.js */
       margin-bottom: 20px;
     }
     .subtitle {
       font-size: 1.2em;
       max-width: 800px;
       margin: 0 auto;
-      opacity: 0; /* for animation */
+      opacity: 0;
     }
     h2 {
       font-size: 2.5em;
@@ -97,24 +95,11 @@
       max-width: 800px;
       opacity: 0;
     }
-    a.btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #22ccaa;
-      color: #111;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-    a.btn:hover {
-      background: #1fa68c;
-    }
   </style>
 </head>
 <body>
-  <canvas id="bg-canvas"></canvas>
+  <!-- Vanta.js container -->
+  <div id="vanta-bg"></div>
 
   <!-- Navigation -->
   <nav>
@@ -163,7 +148,6 @@
       Check out my GitHub repositories to see my latest work on full-stack applications,
       security research, and experimental blockchain projects.
     </p>
-    <a class="btn" href="https://github.com/TANMAYPRAJAPATI33" target="_blank">View My GitHub</a>
   </section>
 
   <!-- Contact Section -->
@@ -177,45 +161,66 @@
     </p>
   </section>
 
-  <!-- Scripts -->
   <script>
     /****************************************************
-     * THREE.JS - Create a rotating wireframe sphere
+     * VANTA.NET Initialization
      ****************************************************/
-    let scene, camera, renderer, sphere;
-    const canvas = document.getElementById('bg-canvas');
-
-    function init3D() {
-      // Scene & Camera
-      scene = new THREE.Scene();
-      const fov = 60;
-      const aspect = window.innerWidth / window.innerHeight;
-      const near = 0.1;
-      const far = 1000;
-      camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-      camera.position.z = 60; // Closer camera
-
-      // Renderer
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
-
-      // Bigger sphere geometry
-      const geometry = new THREE.SphereGeometry(35, 64, 64);
-      const material = new THREE.MeshBasicMaterial({
-        wireframe: true,
-        color: 0xffffff, // White wireframe
-        opacity: 1,      // Fully opaque
-        transparent: true
+    let vantaEffect;
+    window.addEventListener('DOMContentLoaded', () => {
+      vantaEffect = VANTA.NET({
+        el: "#vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        // OPTIONAL: Adjust the following for your style
+        color: 0xff4400,     // main color
+        backgroundColor: 0x000000, // background behind the net
+        points: 12.0,
+        maxDistance: 20.0,
+        spacing: 18.0
       });
-      sphere = new THREE.Mesh(geometry, material);
-      
-      // Move sphere upward so it's centered behind content
-      sphere.position.y = -10;
+    });
 
-      scene.add(sphere);
-      animate3D();
-    }
+    /****************************************************
+     * ANIME.JS - Animate header text on page load
+     ****************************************************/
+    anime.timeline({ easing: 'easeOutExpo', duration: 1200 })
+      .add({
+        targets: '#header-title',
+        opacity: [0, 1],
+        translateY: [-30, 0]
+      })
+      .add({
+        targets: '#header-subtitle',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        offset: '-=600'
+      });
 
-    function animate3D() {
-   
+    /****************************************************
+     * SCROLL ANIMATIONS - Fade in sections on scroll
+     ****************************************************/
+    const sections = document.querySelectorAll('section h2, section p');
+    const observerOptions = { threshold: 0.1 };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          anime({
+            targets: entry.target,
+            opacity: [0, 1],
+            translateY: [30, 0],
+            duration: 1000,
+            easing: 'easeOutExpo'
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
